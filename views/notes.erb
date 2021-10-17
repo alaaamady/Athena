@@ -1,12 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Athena - My Notes</title>
-</head>
-<body>
-    <h1>You're in Notes</h1>
-</body>
-</html>
+<section>
+  <form action="/notes" method="POST">
+    <textarea name = "title" placeholder = "Title"></textarea>
+    <textarea name = "content" placeholder = "Content"></textarea>
+    <input type="submit" value="Take Note!">
+  </form>
+</section>
+
+
+<% @notes.each do |note| %>
+  <article>
+    <h2>
+      <%= note.title%>
+    </h2>
+    <p>
+      <%=note.content%>
+      <span><a href="/notes/<%= note.id%>">[edit]</a></span>
+      <span><a href="/<%= note.id%>">[archive]</a></span>
+      <span><a href="/notes/delete/<%= note.id%>">[delete]</a></span>
+    </p>
+    <p class="meta">Created: <%= note.created_at %></p>
+  </article>
+<% end %>

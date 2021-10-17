@@ -1,2 +1,6 @@
-class Notes < ActiveRecord::Base
+require 'active_record'
+require_relative 'environment.rb'
+
+class Note < ActiveRecord::Base
+
 end

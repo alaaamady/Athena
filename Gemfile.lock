@@ -20,7 +20,10 @@ GEM
     minitest (5.14.4)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    nio4r (2.5.8)
     pg (1.2.3)
+    puma (5.5.2)
+      nio4r (~> 2.0)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
@@ -45,9 +48,11 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activerecord
   json
   jwt
   pg
+  puma
   rake
   shotgun
   sinatra
