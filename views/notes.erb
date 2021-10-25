@@ -1,7 +1,8 @@
+<h1>Welcome <%= @user.name%></h1>
 <section>
   <form action="/notes" method="POST">
-    <textarea name = "title" placeholder = "Title"></textarea>
-    <textarea name = "content" placeholder = "Content"></textarea>
+    <textarea name = "note[title]" placeholder = "Title"></textarea>
+    <textarea name = "note[content]" placeholder = "Content"></textarea>
     <input type="submit" value="Take Note!">
   </form>
 </section>
@@ -15,9 +16,11 @@
     <p>
       <%=note.content%>
       <span><a href="/notes/<%= note.id%>">[edit]</a></span>
-      <span><a href="/<%= note.id%>">[archive]</a></span>
+      <span><a href="/archive/<%= note.id%>">[archive]</a></span>
       <span><a href="/notes/delete/<%= note.id%>">[delete]</a></span>
     </p>
     <p class="meta">Created: <%= note.created_at %></p>
   </article>
 <% end %>
+
+<h3><a href="/archive">Archive</a></h3>

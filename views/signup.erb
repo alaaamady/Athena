@@ -10,8 +10,10 @@
 		<div class="form-box">
 			<h1>Sign Up for Free</h1>
 			<form action="/signup" method="POST">
+				<label for="name">Name</label>
+				<input type="text" name="user[name]">
 				<label for="email">Email</label>
-				<input type="email" name="email">
+				<input type="email" name="user[email]">
 				<label for="password">Password</label>
 				<input type="password" name="password">
 				<button type="submit">SIGN UP</button>

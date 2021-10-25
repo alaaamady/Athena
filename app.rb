@@ -1,7 +1,13 @@
 require 'sinatra'
 require_relative 'models/notes.rb'
+require_relative 'models/users.rb'
 
 class NotesApp < Sinatra::Base 
+
+configure do
+    enable :sessions unless test?
+    set :session_secret, "secret"
+end
 
 get '/' do
   @title = 'Sign Up'
@@ -13,30 +19,49 @@ get '/signin' do
   erb :signin
 end
 
+get '/archive' do
+  @notes = Note.where(archived: true, users_id: session[:user_id])
+  @title = 'Archive'
+  erb :archive
+end
+
 post '/signup' do
   @title = 'Notes'
-  @notes = Note.all
-  erb :notes
+  @user = User.new(params[:user])
+  @user.password = params[:password]
+  @user.save!
+  session[:user_id] = @user.id
+  redirect '/notes'
 end
 
 post '/signin' do
-  @title = 'Notes'
-  @notes = Note.all
-  erb :notes
+  @title = 'Sign In'
+  @user = User.find_by_email(params[:user][:email])
+  if @user.password == params[:password]
+    session[:user_id] = @user.id
+    redirect '/notes'
+  else
+    redirect '/'
+  end
 end
+
+get '/logout' do
+  session.clear
+  redirect'/'
+end 
 
 
 get '/notes' do
-  @notes = Note.all
+  @notes = Note.where(archived: false, users_id: session[:user_id])
   @title = 'All Notes'
+  @user = User.find_by_id(session[:user_id])
   erb :notes
 end
 
 post '/notes' do
-  @notes = Note.all
-  n = Note.create(params[:notes])
-  n.title = params[:title]
-  n.content = params[:content]
+  @notes = Note.where(users_id: session[:user_id])
+  n = Note.create(params[:note])
+  n.users_id = session[:user_id]
   n.save
   redirect '/notes'
 end
@@ -57,6 +82,20 @@ end
 get '/notes/delete/:id' do 
   n = Note.find params[:id]
   n.destroy
+  redirect '/notes'
+end
+
+get '/archive/:id' do
+  n = Note.find params[:id]
+  n.archived = true
+  n.save
+  redirect '/archive'
+end
+
+get '/notes/unarchive/:id' do
+  n = Note.find params[:id]
+  n.archived = false
+  n.save
   redirect '/notes'
 end
 
